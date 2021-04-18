@@ -1,9 +1,12 @@
 import { GetStaticProps } from 'next';
+import { useState } from 'react';
 
-import { getPrismicClient } from '../services/prismic';
+import Prismic from '@prismicio/client';
+import { fromUnixTime } from 'date-fns/esm';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import { getPrismicClient } from '../services/prismic';
 
 interface Post {
   uid?: string;
@@ -24,13 +27,51 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-// export default function Home() {
-//   // TODO
-// }
+export default function Home({
+  postsPagination,
+}: HomeProps): React.ReactElement {
+  const [posts, setPosts] = useState<Post[]>(postsPagination.results);
+  const [nextPage, setNextPage] = useState(postsPagination.next_page);
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient();
-//   // const postsResponse = await prismic.query(TODO);
+  async function handleLoadMorePosts(): Promise<void> {
+    if (!nextPage) return;
+    const response = await fetch(nextPage);
+    const data = await response.json();
+    setNextPage(data.next_page);
+    setPosts([...posts, ...data.results]);
+  }
 
-//   // TODO
-// };
+  return (
+    <main>
+      <ul>
+        {posts.map(post => (
+          <li key={post.uid}>
+            <strong>{post.data.title}</strong>
+          </li>
+        ))}
+      </ul>
+      {nextPage && (
+        <button type="button" onClick={handleLoadMorePosts}>
+          carregar mais
+        </button>
+      )}
+    </main>
+  );
+}
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const { next_page, results } = await getPrismicClient().query(
+    Prismic.Predicates.at('document.type', 'post'),
+    {
+      fetch: ['post.title', 'post.subtitle', 'post.author'],
+      orderings: '[post.first_publication_date]',
+      page: 1,
+      pageSize: 2,
+    }
+  );
+  return {
+    props: {
+      postsPagination: { next_page, results },
+    },
+  };
+};
