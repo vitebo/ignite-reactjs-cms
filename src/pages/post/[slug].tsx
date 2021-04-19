@@ -6,7 +6,7 @@ import { getPrismicClient } from '../../services/prismic';
 import { PostHeader } from '../../components/PostHeader';
 
 import commonStyles from '../../styles/common.module.scss';
-import styles from './post.module.scss';
+import style from './post.module.scss';
 
 interface Post {
   first_publication_date: string | null;
@@ -45,9 +45,9 @@ export default function Post({ post }: PostProps): JSX.Element {
         author={post.data.author}
         timeToRead="4 min"
       />
-      <article>
+      <article className={style.Content}>
         {post.data.content.map(({ heading, body }) => (
-          <section key={String(body)}>
+          <section key={String(body)} className={style.Section}>
             <h2>{heading}</h2>
             <div dangerouslySetInnerHTML={{ __html: body }} />
           </section>

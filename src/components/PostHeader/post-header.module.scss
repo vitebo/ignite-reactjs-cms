@@ -6,6 +6,8 @@
 .Title {
   composes: TitleLarge from '../../styles/common.module.scss';
   margin-top: 5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .Container {
@@ -14,6 +16,8 @@
 
 .InfoList {
   margin-top: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .InfoItem {
