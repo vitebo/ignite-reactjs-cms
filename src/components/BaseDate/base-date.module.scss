@@ -1,0 +1,13 @@
+.Container {
+  align-items: center;
+  display: inline-flex;
+}
+
+.Icon {
+  composes: Icon from '../../styles/common.module.scss';
+}
+
+.Value {
+  margin-left: .5rem;
+  composes: TextSmall from '../../styles/common.module.scss';
+}
