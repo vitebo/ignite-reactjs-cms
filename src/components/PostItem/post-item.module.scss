@@ -1,0 +1,22 @@
+.Container {
+  list-style: none;
+}
+
+.Title {
+  composes: Title from '../../styles/common.module.scss';
+}
+
+.Subtitle {
+  composes: Text from '../../styles/common.module.scss';
+  margin-top: 0.5rem;
+}
+
+.Footer {
+  margin-top: 1.563rem;
+  display: flex;
+  align-items: center;
+}
+
+.Author {
+  margin-left: 1.5rem;
+}
