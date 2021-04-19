@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { RichText } from 'prismic-dom';
 
 import { getPrismicClient } from '../../services/prismic';
+import { PostHeader } from '../../components/PostHeader';
 
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
@@ -37,17 +38,13 @@ export default function Post({ post }: PostProps): JSX.Element {
 
   return (
     <main>
-      <header>
-        <figure>
-          <img src={post.data.banner.url} alt="foo" />
-        </figure>
-        <h1>{post.data.title}</h1>
-        <ul>
-          <li>{post.first_publication_date}</li>
-          <li>{post.data.author}</li>
-          <li>2min</li>
-        </ul>
-      </header>
+      <PostHeader
+        bannerUrl={post.data.banner.url}
+        title={post.data.title}
+        date={post.first_publication_date}
+        author={post.data.author}
+        timeToRead="4 min"
+      />
       <article>
         {post.data.content.map(({ heading, body }) => (
           <section key={String(body)}>

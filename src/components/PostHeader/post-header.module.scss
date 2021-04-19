@@ -1,0 +1,26 @@
+.Figure {
+  display: flex;
+  justify-content: center;
+}
+
+.Title {
+  composes: TitleLarge from '../../styles/common.module.scss';
+  margin-top: 5rem;
+}
+
+.Container {
+  composes: Container from '../../styles/common.module.scss';
+}
+
+.InfoList {
+  margin-top: 1.5rem;
+}
+
+.InfoItem {
+  display: inline-block;
+  list-style: none;
+
+  & + & {
+    margin-left: 1.5rem;
+  }
+}

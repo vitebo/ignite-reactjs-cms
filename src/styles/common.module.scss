@@ -25,6 +25,13 @@
   font-style: normal;
 }
 
+.TitleLarge {
+  composes: Title;
+  font-size: 3rem;
+  line-height: 3.631rem;
+  letter-spacing: 0.031rem;
+}
+
 .Text {
   font-weight: 400;
   font-size: 1.125rem;
