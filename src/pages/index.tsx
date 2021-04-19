@@ -2,11 +2,10 @@ import { GetStaticProps } from 'next';
 import { useState } from 'react';
 
 import Prismic from '@prismicio/client';
-import { fromUnixTime } from 'date-fns/esm';
 
-import commonStyles from '../styles/common.module.scss';
-import styles from './home.module.scss';
+import style from './home.module.scss';
 import { getPrismicClient } from '../services/prismic';
+import { PostItem } from '../components/PostItem';
 
 interface Post {
   uid?: string;
@@ -42,17 +41,26 @@ export default function Home({
   }
 
   return (
-    <main>
-      <ul>
+    <main className={style.Home}>
+      <ul className={style.List}>
         {posts.map(post => (
-          <li key={post.uid}>
-            <strong>{post.data.title}</strong>
-          </li>
+          <PostItem
+            className={style.PostItem}
+            key={post.uid}
+            title={post.data.title}
+            subtitle={post.data.subtitle}
+            date={post.first_publication_date}
+            author={post.data.author}
+          />
         ))}
       </ul>
       {nextPage && (
-        <button type="button" onClick={handleLoadMorePosts}>
-          carregar mais
+        <button
+          type="button"
+          className={style.LoadMorePosts}
+          onClick={handleLoadMorePosts}
+        >
+          Carregar mais posts
         </button>
       )}
     </main>

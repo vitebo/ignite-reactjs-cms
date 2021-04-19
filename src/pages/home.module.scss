@@ -1,1 +1,14 @@
-// TODO
+.Home {
+  composes: Container from '../styles/common.module.scss';
+}
+
+.PostItem {
+  & + & {
+    margin-top: 3.125rem;
+  }
+}
+
+.LoadMorePosts {
+  composes: Link from '../styles/common.module.scss';
+  margin-top: 4.125rem;
+}
