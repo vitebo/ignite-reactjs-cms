@@ -1,4 +1,5 @@
 import { FiUser, FiCalendar } from 'react-icons/fi';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
 import classNames from 'classnames';
@@ -14,6 +15,7 @@ interface PostItemProps {
   date: string;
   author: string;
   className?: string;
+  slug: string;
 }
 
 export function PostItem({
@@ -22,6 +24,7 @@ export function PostItem({
   date,
   author,
   className,
+  slug,
 }: PostItemProps): JSX.Element {
   const classes = classNames([style.Container, className]);
 
@@ -31,17 +34,21 @@ export function PostItem({
 
   return (
     <li className={classes}>
-      <strong className={style.Title}>{title}</strong>
-      <p className={style.Subtitle}>{subtitle}</p>
-      <footer className={style.Footer}>
-        <Info tag="time" value={formattedDate} Icon={FiCalendar} />
-        <Info
-          tag="address"
-          value={author}
-          Icon={FiUser}
-          className={style.Author}
-        />
-      </footer>
+      <Link href={`/post/${encodeURIComponent(slug)}`}>
+        <a className={style.Link}>
+          <strong className={style.Title}>{title}</strong>
+          <p className={style.Subtitle}>{subtitle}</p>
+          <footer className={style.Footer}>
+            <Info tag="time" value={formattedDate} Icon={FiCalendar} />
+            <Info
+              tag="address"
+              value={author}
+              Icon={FiUser}
+              className={style.Author}
+            />
+          </footer>
+        </a>
+      </Link>
     </li>
   );
 }

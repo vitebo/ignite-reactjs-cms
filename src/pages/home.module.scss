@@ -4,11 +4,12 @@
 
 .PostItem {
   & + & {
-    margin-top: 3.125rem;
+    margin-top: 1.125rem;
   }
 }
 
 .LoadMorePosts {
   composes: Link from '../styles/common.module.scss';
-  margin-top: 4.125rem;
+  margin-top: 2.125rem;
+  padding: 1rem;
 }

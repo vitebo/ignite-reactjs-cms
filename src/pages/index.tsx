@@ -51,6 +51,7 @@ export default function Home({
             subtitle={post.data.subtitle}
             date={post.first_publication_date}
             author={post.data.author}
+            slug={post.uid}
           />
         ))}
       </ul>

@@ -1,3 +1,11 @@
 .Container {
   composes: Container from '../../styles/common.module.scss';
+  padding-top: 2.972rem;
+  padding-bottom: 2.051rem;
+}
+
+.Logo {
+  composes: Focus from '../../styles/common.module.scss';
+  padding: 1rem;
+  display: inline-block;
 }

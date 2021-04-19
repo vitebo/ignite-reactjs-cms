@@ -2,8 +2,23 @@
   list-style: none;
 }
 
+.Link {
+  composes: Focus from '../../styles/common.module.scss';
+  display: block;
+  text-decoration: none;
+  padding: 1rem;
+
+  &:hover,
+  &:focus {
+    .Title {
+      color: var(--color-highlight);
+    }
+  }
+}
+
 .Title {
   composes: Title from '../../styles/common.module.scss';
+  transition: color 250ms;
 }
 
 .Subtitle {
