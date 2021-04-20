@@ -1,11 +1,12 @@
 import { GetStaticProps } from 'next';
 import { useState } from 'react';
-
+import Head from 'next/head';
 import Prismic from '@prismicio/client';
 
 import style from './home.module.scss';
 import { getPrismicClient } from '../services/prismic';
 import { PostItem } from '../components/PostItem';
+import Header from '../components/Header';
 
 interface Post {
   uid?: string;
@@ -41,30 +42,36 @@ export default function Home({
   }
 
   return (
-    <main className={style.Home}>
-      <ul className={style.List}>
-        {posts.map(post => (
-          <PostItem
-            className={style.PostItem}
-            key={post.uid}
-            title={post.data.title}
-            subtitle={post.data.subtitle}
-            date={post.first_publication_date}
-            author={post.data.author}
-            slug={post.uid}
-          />
-        ))}
-      </ul>
-      {nextPage && (
-        <button
-          type="button"
-          className={style.LoadMorePosts}
-          onClick={handleLoadMorePosts}
-        >
-          Carregar mais posts
-        </button>
-      )}
-    </main>
+    <>
+      <Head>
+        <title>spacetraveling.</title>
+      </Head>
+      <Header />
+      <main className={style.Home}>
+        <ul className={style.List}>
+          {posts.map(post => (
+            <PostItem
+              className={style.PostItem}
+              key={post.uid}
+              title={post.data.title}
+              subtitle={post.data.subtitle}
+              date={post.first_publication_date}
+              author={post.data.author}
+              slug={post.uid}
+            />
+          ))}
+        </ul>
+        {nextPage && (
+          <button
+            type="button"
+            className={style.LoadMorePosts}
+            onClick={handleLoadMorePosts}
+          >
+            Carregar mais posts
+          </button>
+        )}
+      </main>
+    </>
   );
 }
 
