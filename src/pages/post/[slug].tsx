@@ -5,11 +5,11 @@ import { RichText } from 'prismic-dom';
 import { getPrismicClient } from '../../services/prismic';
 import { PostHeader } from '../../components/PostHeader';
 
-import commonStyles from '../../styles/common.module.scss';
 import style from './post.module.scss';
 
 interface Post {
   first_publication_date: string | null;
+  timeToRead: string;
   data: {
     title: string;
     banner: {
@@ -43,7 +43,7 @@ export default function Post({ post }: PostProps): JSX.Element {
         title={post.data.title}
         date={post.first_publication_date}
         author={post.data.author}
-        timeToRead="4 min"
+        timeToRead={post.timeToRead}
       />
       <article className={style.Content}>
         {post.data.content.map(({ heading, body }) => (
@@ -67,12 +67,31 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<PostProps> = async ({ params }) => {
   const { slug } = params;
   const response = await getPrismicClient().getByUID('post', String(slug), {});
+
+  const timeToRead = (() => {
+    const AVERAGE_WORDS_A_HUMAN_READ_PER_MINUTE = 200;
+    const wordsCountOfThePost = response.data.content.reduce(
+      (totalWordsCount, section) => {
+        const headingWordsCount = section.heading?.split(' ').length || 0;
+        const bodyWordsCount = RichText.asText(section.body).split(' ').length;
+        return totalWordsCount + headingWordsCount + bodyWordsCount;
+      },
+      0
+    );
+    const minutes = Math.round(
+      wordsCountOfThePost / AVERAGE_WORDS_A_HUMAN_READ_PER_MINUTE
+    );
+    return `${minutes} min`;
+  })();
+
   const content = response.data.content.map(({ heading, body }) => ({
     heading,
     body: RichText.asHtml(body),
   }));
+
   const post = {
     first_publication_date: response.first_publication_date,
+    timeToRead,
     data: {
       title: response.data.title,
       banner: {
