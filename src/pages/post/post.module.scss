@@ -77,3 +77,19 @@
   padding-left: 1rem;
   padding-right: 1rem;
 }
+
+.Footer {
+  composes: Container from '../../styles/common.module.scss';
+  margin-top: 5rem;
+
+  :global {
+    .utterances {
+      margin:  0;
+    }
+  }
+}
+
+.Comments {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

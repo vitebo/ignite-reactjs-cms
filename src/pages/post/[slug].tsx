@@ -6,6 +6,7 @@ import Head from 'next/head';
 
 import { getPrismicClient } from '../../services/prismic';
 import { PostHeader } from '../../components/PostHeader';
+import { Comments } from '../../components/Comments';
 import Header from '../../components/Header';
 
 import style from './post.module.scss';
@@ -79,6 +80,11 @@ export default function Post({ post }: PostProps): JSX.Element {
           ))}
         </article>
       </main>
+      <footer className={style.Footer}>
+        <section className={style.Comments}>
+          <Comments />
+        </section>
+      </footer>
     </>
   );
 }
