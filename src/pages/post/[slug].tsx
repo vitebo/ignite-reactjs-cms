@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { RichText } from 'prismic-dom';
+import Prismic from '@prismicio/client';
 
 import { getPrismicClient } from '../../services/prismic';
 import { PostHeader } from '../../components/PostHeader';
@@ -33,7 +34,7 @@ export default function Post({ post }: PostProps): JSX.Element {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return <div>Carregando...</div>;
   }
 
   return (
@@ -49,7 +50,7 @@ export default function Post({ post }: PostProps): JSX.Element {
         {post.data.content.map(({ heading, body }) => (
           <section key={String(body)} className={style.Section}>
             <h2>{heading}</h2>
-            <div dangerouslySetInnerHTML={{ __html: body }} />
+            <div dangerouslySetInnerHTML={{ __html: String(body) }} />
           </section>
         ))}
       </article>
@@ -58,8 +59,18 @@ export default function Post({ post }: PostProps): JSX.Element {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const { results } = await getPrismicClient().query(
+    Prismic.Predicates.at('document.type', 'post'),
+    {
+      page: 1,
+      pageSize: 2,
+    }
+  );
+  const paths = results.map(post => ({
+    params: { slug: post.uid },
+  }));
   return {
-    paths: [],
+    paths,
     fallback: true,
   };
 };
