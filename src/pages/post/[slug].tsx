@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { RichText } from 'prismic-dom';
 import Prismic from '@prismicio/client';
 import Head from 'next/head';
+import Link from 'next/link';
 
 import { getPrismicClient } from '../../services/prismic';
 import { PostHeader } from '../../components/PostHeader';
@@ -30,9 +31,10 @@ interface Post {
 
 interface PostProps {
   post: Post;
+  preview: boolean;
 }
 
-export default function Post({ post }: PostProps): JSX.Element {
+export default function Post({ post, preview }: PostProps): JSX.Element {
   const router = useRouter();
 
   if (router.isFallback) {
@@ -84,6 +86,13 @@ export default function Post({ post }: PostProps): JSX.Element {
         <section className={style.Comments}>
           <Comments />
         </section>
+        {preview && (
+          <aside>
+            <Link href="/api/exit-preview">
+              <a className={style.ExitPreviewMode}>Sair do modo Preview</a>
+            </Link>
+          </aside>
+        )}
       </footer>
     </>
   );
@@ -106,10 +115,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps<PostProps> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<PostProps> = async ({
+  params,
+  preview = false,
+  previewData,
+}) => {
   const { slug } = params;
-  const post = await getPrismicClient().getByUID('post', String(slug), {});
+  const post = await getPrismicClient().getByUID('post', String(slug), {
+    ref: previewData?.ref ?? null,
+  });
   return {
-    props: { post },
+    props: { post, preview },
   };
 };

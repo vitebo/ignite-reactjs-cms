@@ -93,3 +93,10 @@
   padding-left: 1rem;
   padding-right: 1rem;
 }
+
+.ExitPreviewMode {
+  composes: ExitPreviewMode from '../../styles/common.module.scss';
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 5.5rem;
+}
