@@ -13,8 +13,9 @@ import Header from '../../components/Header';
 import style from './post.module.scss';
 
 interface Post {
-  uid: string;
+  uid?: string;
   first_publication_date: string | null;
+  last_publication_date: string | null;
   data: {
     title: string;
     banner: {
@@ -78,6 +79,7 @@ export default function Post({
           date={post.first_publication_date}
           author={post.data.author}
           timeToRead={timeToRead}
+          lastEdition={post.last_publication_date}
         />
         <article className={style.Content}>
           {post.data.content.map(({ heading, body }, index) => (

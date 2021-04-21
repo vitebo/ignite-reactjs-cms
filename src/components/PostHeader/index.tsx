@@ -14,6 +14,7 @@ interface PostHeaderProps {
   date: string;
   author: string;
   timeToRead: string;
+  lastEdition?: string;
 }
 
 export function PostHeader({
@@ -22,10 +23,16 @@ export function PostHeader({
   date,
   author,
   timeToRead,
+  lastEdition,
 }: PostHeaderProps): JSX.Element {
   const formattedDate = useMemo(() => {
     return format(new Date(date), 'dd MMM yyyy', { locale });
   }, [date]);
+
+  const formattedLastEdition = useMemo(() => {
+    if (!lastEdition) return '';
+    return format(new Date(lastEdition), "dd MMM yyyy, à's' HH:mm", { locale });
+  }, [lastEdition]);
 
   return (
     <header>
@@ -52,6 +59,11 @@ export function PostHeader({
             <Info tag="span" value={timeToRead} Icon={FiClock} />
           </li>
         </ul>
+        {lastEdition && (
+          <span className={style.LastEdition}>
+            * editado em {formattedLastEdition}
+          </span>
+        )}
       </section>
     </header>
   );
