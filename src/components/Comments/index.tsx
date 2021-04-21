@@ -2,7 +2,7 @@ export function Comments(): JSX.Element {
   return (
     <div
       ref={elem => {
-        if (!elem) {
+        if (!elem || elem.childNodes.length) {
           return;
         }
         const scriptElem = document.createElement('script');
