@@ -93,8 +93,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async ({
     Prismic.Predicates.at('document.type', 'post'),
     {
       fetch: ['post.title', 'post.subtitle', 'post.author'],
-      orderings: '[post.first_publication_date]',
-      page: 1,
+      orderings: '[document.first_publication_date desc]',
       pageSize: 2,
       ref: previewData?.ref ?? null,
     }

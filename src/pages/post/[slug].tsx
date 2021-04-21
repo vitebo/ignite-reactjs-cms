@@ -13,6 +13,7 @@ import Header from '../../components/Header';
 import style from './post.module.scss';
 
 interface Post {
+  uid: string;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -32,9 +33,16 @@ interface Post {
 interface PostProps {
   post: Post;
   preview: boolean;
+  prevPost?: Post;
+  nextPost?: Post;
 }
 
-export default function Post({ post, preview }: PostProps): JSX.Element {
+export default function Post({
+  post,
+  preview,
+  prevPost,
+  nextPost,
+}: PostProps): JSX.Element {
   const router = useRouter();
 
   if (router.isFallback) {
@@ -83,6 +91,28 @@ export default function Post({ post, preview }: PostProps): JSX.Element {
         </article>
       </main>
       <footer className={style.Footer}>
+        <section className={style.Pages}>
+          {prevPost && (
+            <Link href={`/post/${encodeURIComponent(prevPost.uid)}`}>
+              <a className={style.PageLinkPrev}>
+                <strong className={style.PageLinkTitle}>
+                  {prevPost.data.title}
+                </strong>
+                <span className={style.PageLinkLabel}>Post Anterior</span>
+              </a>
+            </Link>
+          )}
+          {nextPost && (
+            <Link href={`/post/${encodeURIComponent(nextPost.uid)}`}>
+              <a className={style.PageLinkNext}>
+                <strong className={style.PageLinkTitle}>
+                  {nextPost.data.title}
+                </strong>
+                <span className={style.PageLinkLabel}>Próximo Post</span>
+              </a>
+            </Link>
+          )}
+        </section>
         <section className={style.Comments}>
           <Comments />
         </section>
@@ -124,7 +154,36 @@ export const getStaticProps: GetStaticProps<PostProps> = async ({
   const post = await getPrismicClient().getByUID('post', String(slug), {
     ref: previewData?.ref ?? null,
   });
+  const prevPostPromise = getPrismicClient().query(
+    Prismic.predicates.at('document.type', 'post'),
+    {
+      pageSize: 1,
+      after: `${post.id}`,
+      orderings: '[document.first_publication_date desc]',
+      ref: previewData?.ref ?? null,
+    }
+  );
+  const nextPostPromise = getPrismicClient().query(
+    Prismic.predicates.at('document.type', 'post'),
+    {
+      pageSize: 1,
+      after: `${post.id}`,
+      orderings: '[document.first_publication_date]',
+      ref: previewData?.ref ?? null,
+    }
+  );
+  const [prevPostResponse, nextPostResponse] = await Promise.all([
+    prevPostPromise,
+    nextPostPromise,
+  ]);
+  const [prevPost = null] = prevPostResponse.results;
+  const [nextPost = null] = nextPostResponse.results;
   return {
-    props: { post, preview },
+    props: {
+      post,
+      preview,
+      prevPost,
+      nextPost,
+    },
   };
 };
